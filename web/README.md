@@ -1,0 +1,1 @@
+# uso de stripe en app de react
