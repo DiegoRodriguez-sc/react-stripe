@@ -13,7 +13,7 @@ export const fetchPublic = (endpoint, data, method = "GET", id) => {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: data ? JSON.stringify( data ) : null,
     });
   }
 };

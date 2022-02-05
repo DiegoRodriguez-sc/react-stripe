@@ -53,6 +53,17 @@ const FormPayment = () => {
       );
       const resp = await crearPago.json();
       console.log(resp);
+      stripe.confirmCardPayment(resp.data.client_secret)
+       .then(async()=>{
+         const id = localStorage.getItem("uid");
+         const resp = await fetchPublic("order/confirm", null, "PUT", id);
+         const pago = await resp.json();
+         console.log(pago);
+         console.log("dinerito, dinerito");
+       })
+       .catch();
+      
+
     } else {
       console.log(error);
     }
