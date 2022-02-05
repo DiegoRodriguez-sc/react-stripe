@@ -46,6 +46,12 @@ const FormPayment = () => {
       ),
     });
 
+    if(!error){
+      const id = localStorage.getItem("uid");
+      const crearPago = await fetchPublic("order", {token: paymentMethod.id}, "PUT", id);
+      const resp = await crearPago.json();
+      console.log(resp);
+    }
     console.log(error, paymentMethod);
   };
 
