@@ -1,5 +1,5 @@
 
-const base = process.env.REACT_APP_BASE_URL || "https://localhost:8080/api/";
+const base = process.env.REACT_APP_BASE_URL || "http://localhost:8080/api/";
 
 export const fetchPublic = (endpoint, data, method = "GET", id) => {
 
