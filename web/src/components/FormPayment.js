@@ -46,13 +46,19 @@ const FormPayment = () => {
       ),
     });
 
-    if(!error){
+    if (!error) {
       const id = localStorage.getItem("uid");
-      const crearPago = await fetchPublic("order", {token: paymentMethod.id}, "PUT", id);
+      const crearPago = await fetchPublic(
+        "order",
+        { token: paymentMethod.id },
+        "PUT",
+        id
+      );
       const resp = await crearPago.json();
       console.log(resp);
+    } else {
+      console.log(error);
     }
-    console.log(error, paymentMethod);
   };
 
   const [state, setState] = React.useState({
