@@ -12,8 +12,6 @@ const dbConnection = async () => {
     console.log(error);
     throw new Error("Error a la hora de iniciar la base de datos");
   }
-  mongoose.set("useCreateIndex", true);
-  mongoose.set("useFindAndModify", false);
 };
 
 module.exports = {

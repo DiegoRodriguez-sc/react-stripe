@@ -8,7 +8,7 @@ const postOrder = async (req, res) => {
       name,
       amount,
     });
-    res.status(201).send({ data: oderRes });
+    res.status(201).send({ data: order });
   } catch (e) {
     console.log(e);
     res.status(500);

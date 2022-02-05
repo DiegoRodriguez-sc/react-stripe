@@ -21,7 +21,7 @@ const OrderSchema = Schema({
   versionKey:false
 });
 
-ProductSchema.methods.toJSON = function () {
+OrderSchema.methods.toJSON = function () {
   const { __v, _id, ...data } = this.toObject();
   data.uid = _id;
   return data;
