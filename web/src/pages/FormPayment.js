@@ -8,12 +8,9 @@ import {
 } from "@stripe/react-stripe-js";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import {
-  StripeTextFieldCVC,
-  StripeTextFieldExpiry,
-  StripeTextFieldNumber,
-} from "./CommonTextField";
+import { StripeTextFieldCVC, StripeTextFieldExpiry, StripeTextFieldNumber } from "../components/CommonTextField";
 import { fetchPublic } from "../services/fetch.service";
+
 
 const FormPayment = () => {
   const [order, setOrder] = useState({});

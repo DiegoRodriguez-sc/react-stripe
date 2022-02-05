@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { fetchPublic } from "../services/fetch.service";
 
+
 const validationSchema = yup.object({
   name: yup.string("Enter your name").required("El nombre es requerido"),
   amount: yup.number("Enter your monto").required("El monto es requerido"),

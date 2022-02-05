@@ -1,7 +1,8 @@
 import React from 'react';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import FormGenerar from '../components/FormGenerar';
 import StripeContainer from '../components/StripeContainer';
+import FormGenerar from '../pages/FormGenerar';
+
 
 const AppRouter = () => {
  return (
