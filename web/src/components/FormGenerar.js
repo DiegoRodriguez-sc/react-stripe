@@ -23,10 +23,10 @@ const FormGenerar = () => {
     <Container maxWidth="md" sx={{ display: "flex", justifyContent: "center" }}>
       <Box sx={{ md: { padding: 10}, width:{md:"70%", xs:"100%"}, marginTop:20 }}>
         <Typography variant="h3" align="center">
-          React Stripe
+          React Stripe - Generar link de pago
         </Typography>
         <Box mt={2} />
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit ={formik.handleSubmit}>
           <TextField
             fullWidth
             id="name"
@@ -51,8 +51,8 @@ const FormGenerar = () => {
             helperText={formik.touched.monto && formik.errors.monto}
           />
           <Box mt={2} />
-          <Button color="primary" variant="contained" fullWidth type="submit">
-            Submit
+          <Button color = "primary" variant ="contained" fullWidth type="submit">
+            Generar
           </Button>
         </form>
       </Box>
