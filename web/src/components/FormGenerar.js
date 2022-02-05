@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { fetchPublic } from "../services/fetch.service";
 
@@ -12,14 +12,14 @@ const validationSchema = yup.object({
 
 const FormGenerar = () => {
   const navigate = useNavigate();
-  // TODO:generamos  una nueva orden
+  // TODO: generamos  una nueva orden
   const handleGenerateOrder = async (data) => {
     const newOrder = await fetchPublic("order", data, "POST", null);
     const resp = await newOrder.json();
     localStorage.setItem("uid", resp.data.uid);
-    if(newOrder.ok){
+    if (newOrder.ok) {
       navigate("/payment");
-    }else{
+    } else {
       alert("ocurri un error al generar el link");
     }
   };
@@ -30,7 +30,7 @@ const FormGenerar = () => {
       amount: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async(values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       await handleGenerateOrder(values);
       resetForm();
     },

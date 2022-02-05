@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-
+import {
+  useStripe,
+  useElements,
+  CardCvcElement,
+  CardExpiryElement,
+  CardNumberElement,
+} from "@stripe/react-stripe-js";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import {
@@ -12,18 +18,36 @@ import { fetchPublic } from "../services/fetch.service";
 const FormPayment = () => {
   const [order, setOrder] = useState({});
   const [loading, setLoading] = useState(true);
+  const stripe = useStripe();
+  const elements = useElements();
 
+  //TODO: order de la base de datos
   useEffect(() => {
     setLoading(true);
     const id = localStorage.getItem("uid");
     const getData = async () => {
       const resp = await fetchPublic("order", null, "GET", id);
-      const datos = resp.json();
+      const datos = await resp.json();
       setOrder(datos);
       setLoading(false);
     };
     getData();
   }, []);
+
+  // TODO: submit del formulario, Crear metodo de pago
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: elements.getElement(
+        CardCvcElement,
+        CardExpiryElement,
+        CardNumberElement
+      ),
+    });
+
+    console.log(error, paymentMethod);
+  };
 
   const [state, setState] = React.useState({
     cardNumberComplete: false,
@@ -42,9 +66,9 @@ const FormPayment = () => {
 
   const { cardNumberError, expiredError, cvcError } = state;
 
-  // if (loading) {
-  //   return <div>generando formulario de pago...</div>;
-  // }
+  if (loading) {
+    return <div>generando formulario de pago...</div>;
+  }
 
   return (
     <Container maxWidth="md" sx={{ display: "flex", justifyContent: "center" }}>
@@ -56,21 +80,22 @@ const FormPayment = () => {
         }}
       >
         <Typography variant="h3" align="center">
-          Hola
+          Hola {order.data.name}
         </Typography>
         <Typography variant="h5" align="center">
           📌 A continuación debes de introducir los datos de tu tarjeta para
-          procesar el pago! El pago se procesara mediante la platforma de stripe
+          procesar el pago! El pago se procesara mediante la plataforma de
+          stripe
         </Typography>
         <Box mt={3} />
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
             id="name"
             name="name"
             label="name"
             autoComplete="off"
-            value={""}
+            value={order.data.name}
             InputProps={{
               readOnly: true,
             }}
@@ -82,13 +107,14 @@ const FormPayment = () => {
             name="amount"
             label="amount"
             autoComplete="off"
-            value={""}
+            value={order.data.amount}
             InputProps={{
               readOnly: true,
             }}
           />
           <Box mt={2} />
           <StripeTextFieldNumber
+            stripeElement={CardNumberElement}
             error={Boolean(cardNumberError)}
             fullWidth
             required
@@ -99,6 +125,7 @@ const FormPayment = () => {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <StripeTextFieldExpiry
+                stripeElement={CardExpiryElement}
                 error={Boolean(expiredError)}
                 required
                 labelErrorMessage={expiredError}
@@ -107,6 +134,7 @@ const FormPayment = () => {
             </Grid>
             <Grid item xs={6}>
               <StripeTextFieldCVC
+                stripeElement={CardCvcElement}
                 error={Boolean(cvcError)}
                 required
                 labelErrorMessage={cvcError}

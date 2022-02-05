@@ -1,19 +1,8 @@
 import * as React from "react";
-import {
-  CardCvcElement,
-  CardExpiryElement,
-  CardNumberElement,
-} from "@stripe/react-stripe-js";
 import StripeInput from "./StripeInput";
 import { TextField } from "@mui/material";
 
-
-
-
-
-export const StripeTextField = (
-  props
-) => {
+export const StripeTextField = (props) => {
   const {
     helperText,
     InputLabelProps,
@@ -30,7 +19,7 @@ export const StripeTextField = (
       fullWidth
       InputLabelProps={{
         ...InputLabelProps,
-        shrink: true
+        shrink: true,
       }}
       error={error}
       InputProps={{
@@ -38,44 +27,23 @@ export const StripeTextField = (
         inputProps: {
           ...inputProps,
           ...InputProps.inputProps,
-          component: stripeElement
+          component: stripeElement,
         },
-        inputComponent: StripeInput
+        inputComponent: StripeInput,
       }}
       helperText={error ? labelErrorMessage : helperText}
-      {...(other)}
+      {...other}
     />
   );
 };
 
-export function StripeTextFieldNumber(props
-) {
-  return (
-    <StripeTextField
-      label="Credit Card Number"
-      stripeElement={CardNumberElement}
-      {...props}
-    />
-  );
+export function StripeTextFieldNumber(props) {
+  return <StripeTextField label="Credit Card Number" {...props} />;
 }
-export function StripeTextFieldExpiry(props
-) {
-  return (
-    <StripeTextField
-      label="Expires"
-      stripeElement={CardExpiryElement}
-      {...props}
-    />
-  );
+export function StripeTextFieldExpiry(props) {
+  return <StripeTextField label="Expires" {...props} />;
 }
 
-export function StripeTextFieldCVC(props
-) {
-  return (
-    <StripeTextField
-      label="CVC Code"
-      stripeElement={CardCvcElement}
-      {...props}
-    />
-  );
+export function StripeTextFieldCVC(props) {
+  return <StripeTextField label="CVC Code" {...props} />;
 }
