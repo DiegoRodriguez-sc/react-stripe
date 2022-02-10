@@ -61,7 +61,7 @@ const FormPayment = () => {
          console.log(pago);
          console.log("dinerito, dinerito");
        })
-       .catch();
+       .catch((e)=>console.log(e));
       
 
     } else {
