@@ -11,7 +11,7 @@ const generatePaymentIntent = async ({ amount, user, payment_method }) => {
     currency: "USD",
     payment_method_types: ["card"],
     payment_method,
-    description: `Pago de -> ${user}: Pago`,
+    description: `Pago de ${user}`,
   });
 
   return resPaymentIntent;
