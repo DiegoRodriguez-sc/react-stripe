@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   useStripe,
   useElements,
@@ -8,15 +10,28 @@ import {
 } from "@stripe/react-stripe-js";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { StripeTextFieldCVC, StripeTextFieldExpiry, StripeTextFieldNumber } from "../components/CommonTextField";
+import {
+  StripeTextFieldCVC,
+  StripeTextFieldExpiry,
+  StripeTextFieldNumber,
+} from "../components/CommonTextField";
 import { fetchPublic } from "../services/fetch.service";
 
-
 const FormPayment = () => {
+  let navigate = useNavigate();
   const [order, setOrder] = useState({});
   const [loading, setLoading] = useState(true);
+  const [send, setSend] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "bottom-right",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
 
   //TODO: order de la base de datos
   useEffect(() => {
@@ -25,15 +40,25 @@ const FormPayment = () => {
     const getData = async () => {
       const resp = await fetchPublic("order", null, "GET", id);
       const datos = await resp.json();
+      console.log(datos);
       setOrder(datos);
       setLoading(false);
+      if (datos.data.status === "success") {
+        setSend(true);
+        Toast.fire({
+          icon: "error",
+          title: "EL pago ya se realizo",
+        });
+      }
     };
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // TODO: submit del formulario, Crear metodo de pago
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSend(true);
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(
@@ -52,18 +77,24 @@ const FormPayment = () => {
         id
       );
       const resp = await crearPago.json();
-      console.log(resp);
-      stripe.confirmCardPayment(resp.data.client_secret)
-       .then(async()=>{
-         const id = localStorage.getItem("uid");
-         const resp = await fetchPublic("order/confirm", null, "PUT", id);
-         const pago = await resp.json();
-         console.log(pago);
-         console.log("dinerito, dinerito");
-       })
-       .catch((e)=>console.log(e));
-      
-
+      stripe
+        .confirmCardPayment(resp.data.client_secret)
+        .then(async () => {
+          const id = localStorage.getItem("uid");
+          const resp = await fetchPublic("order/confirm", null, "PUT", id);
+          const pago = await resp.json();
+          console.log(pago);
+          if (pago.data.status.includes("succe")) {
+            navigate("/payment/success");
+          } else {
+            setSend(false);
+            Toast.fire({
+              icon: "error",
+              title: pago.data.last_payment_error.code,
+            });
+          }
+        })
+        .catch((e) => console.log(e));
     } else {
       console.log(error);
     }
@@ -163,7 +194,13 @@ const FormPayment = () => {
             </Grid>
           </Grid>
           <Box mt={3} />
-          <Button color="success" variant="contained" fullWidth type="submit">
+          <Button
+            color="success"
+            variant="contained"
+            disabled={send}
+            fullWidth
+            type="submit"
+          >
             Pagar
           </Button>
         </form>
