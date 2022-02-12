@@ -1,5 +1,5 @@
 # React Stripe Material UI
-Uso de [Stripe](https://stripe.com/) con React y material UI.
+Uso de [Stripe](https://stripe.com/) con React ,material UI y node para la parte del backend.  
 
 - Generamos el link de pago con el nombre y monto :
 
@@ -19,7 +19,7 @@ Uso de [Stripe](https://stripe.com/) con React y material UI.
 * [React.js](https://es.reactjs.org/)
 * [Material UI](https://mui.com/)
 * [Stripe](https://stripe.com/)
-
+* [Node.js](https://nodejs.org/es/)
 
 ## Live demo 🔴
 
